@@ -49,19 +49,20 @@ func updateWeekNumber() {
 
 func generateImage(week int) []byte {
 
+	const iconSize = 64
+	const fontSize = 50
+
 	fontPath, err := findfont.Find("segoeui.ttf")
 	if err != nil {
 		panic(err)
 	}
 
-	const iconSize = 64
-	const fontSize = 50
-
 	dc := gg.NewContext(iconSize, iconSize)
-	dc.SetRGB(1, 1, 1)
 	if err := dc.LoadFontFace(fontPath, fontSize); err != nil {
 		panic(err)
 	}
+
+	dc.SetRGB(1, 1, 1)
 	dc.DrawStringAnchored(fmt.Sprintf("%d", week), iconSize/2, iconSize/2, 0.5, 0.5)
 	img := dc.Image()
 
