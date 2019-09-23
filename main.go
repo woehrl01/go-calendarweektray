@@ -16,28 +16,27 @@ func main() {
 	systray.Run(onReady, onExit)
 }
 
-
 func onReady() {
 	systray.SetTitle("Kalenderwoche")
 
-	mQuit := systray.AddMenuItem("Beenden", "Beendet die Applikation")
-	ticker := time.NewTicker(10 * time.Minute)
-
-	go func(){
-		for ; ; <-ticker.C {
-			updateWeekNumber()
-		}
-	}()
-
-	go func() {
-		<-mQuit.ClickedCh
-		ticker.Stop()
-		systray.Quit()
-	}()
+	go keepWeekNumberIconUpToDate()
+	go quitOnMenu()
 }
 
 func onExit() {
 
+}
+
+func keepWeekNumberIconUpToDate(){
+	for ticker := time.NewTicker(10 * time.Minute) ; ; <-ticker.C {
+		updateWeekNumber()
+	}
+}
+
+func quitOnMenu(){
+	mQuit := systray.AddMenuItem("Beenden", "Beendet die Applikation")
+	<-mQuit.ClickedCh
+	systray.Quit()
 }
 
 func updateWeekNumber() {
