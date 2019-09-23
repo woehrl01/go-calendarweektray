@@ -20,22 +20,19 @@ func onReady() {
 	systray.SetTitle("Kalenderwoche")
 
 	mQuit := systray.AddMenuItem("Beenden", "Beendet die Applikation")
-
 	ticker := time.NewTicker(10 * time.Minute)
 
-	go func() {
-		updateWeekNumber()
+	go func(){
 		for {
-			select {
-			case <-ticker.C:
-				updateWeekNumber()
-				break
-			case <-mQuit.ClickedCh:
-				ticker.Stop()
-				systray.Quit()
-				return
-			}
+			updateWeekNumber()
+			<-ticker.C
 		}
+	}()
+
+	go func() {
+		<-mQuit.ClickedCh
+		ticker.Stop()
+		systray.Quit()
 	}()
 }
 
