@@ -3,25 +3,51 @@ package main
 import (
 	"bufio"
 	"bytes"
-
-	ico "github.com/biessek/golang-ico"
-
-	findfont "github.com/flopp/go-findfont"
-
-	"github.com/fogleman/gg"
-
-	"github.com/getlantern/systray"
-
 	"fmt"
 	"time"
+
+	ico "github.com/biessek/golang-ico"
+	findfont "github.com/flopp/go-findfont"
+	"github.com/fogleman/gg"
+	"github.com/getlantern/systray"
 )
 
 func main() {
 	systray.Run(onReady, onExit)
 }
 
+func onReady() {
+	systray.SetTitle("Kalenderwoche")
+
+	mQuit := systray.AddMenuItem("Beenden", "Beendet die Applikation")
+
+	ticker := time.NewTicker(10 * time.Minute)
+
+	go func() {
+		updateWeekNumber()
+		for {
+			select {
+			case <-ticker.C:
+				updateWeekNumber()
+				break
+			case <-mQuit.ClickedCh:
+				ticker.Stop()
+				systray.Quit()
+				return
+			}
+		}
+	}()
+}
+
 func onExit() {
 
+}
+
+func updateWeekNumber() {
+	_, week := time.Now().UTC().ISOWeek()
+
+	systray.SetIcon(generateImage(week))
+	systray.SetTooltip(fmt.Sprintf("Aktuelle Kalenderwoche: %d", week))
 }
 
 func generateImage(week int) []byte {
@@ -47,34 +73,4 @@ func generateImage(week int) []byte {
 	ico.Encode(foo, img)
 	foo.Flush()
 	return b.Bytes()
-}
-
-func updateWeekNumber() {
-	_, week := time.Now().UTC().ISOWeek()
-
-	systray.SetIcon(generateImage(week))
-	systray.SetTooltip(fmt.Sprintf("Aktuelle Kalenderwoche: %d", week))
-}
-
-func onReady() {
-	systray.SetTitle("Kalenderwoche")
-
-	mQuit := systray.AddMenuItem("Beenden", "Beendet die Applikation")
-
-	ticker := time.NewTicker(10 * time.Minute)
-
-	go func() {
-		updateWeekNumber()
-		for {
-			select {
-			case <-ticker.C:
-				updateWeekNumber()
-				break
-			case <-mQuit.ClickedCh:
-				ticker.Stop()
-				systray.Quit()
-				return
-			}
-		}
-	}()
 }
