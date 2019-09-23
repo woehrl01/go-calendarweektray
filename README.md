@@ -10,5 +10,6 @@ Shows the current calendar week in the system tray
 Currently only tested in Windows 10.
 
 ```go 
-./build.cmd 
+./getdeps.cmd  #Get the required dependencies
+./build.cmd    #Build the application
 ```
