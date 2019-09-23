@@ -16,6 +16,7 @@ func main() {
 	systray.Run(onReady, onExit)
 }
 
+
 func onReady() {
 	systray.SetTitle("Kalenderwoche")
 
@@ -23,9 +24,8 @@ func onReady() {
 	ticker := time.NewTicker(10 * time.Minute)
 
 	go func(){
-		for {
+		for ; ; <-ticker.C {
 			updateWeekNumber()
-			<-ticker.C
 		}
 	}()
 
