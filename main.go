@@ -17,15 +17,15 @@ func onReady() {
 }
 
 func keepWeekNumberIconUpToDate(){
-	nextCalendarWeek := nextCalendarWeek()
+	calendarWeek := currentCalendarWeekIterator()
 	for {
-		updateIconAndTooltip(<-nextCalendarWeek)
+		updateIconAndTooltip(<-calendarWeek.ChangedCh)
 	}
 }
 
 func quitOnMenu(){
-	mQuit := systray.AddMenuItem("Beenden", "Beendet die Applikation")
-	<-mQuit.ClickedCh
+	quitMenuItem := systray.AddMenuItem("Beenden", "Beendet die Applikation")
+	<-quitMenuItem.ClickedCh
 	systray.Quit()
 }
 
