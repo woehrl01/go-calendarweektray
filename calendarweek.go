@@ -4,7 +4,11 @@ import (
 	"time"
 )
 
-func nextCalendarWeek() chan int{
+type CalendarWeekIterator struct{
+	ChangedCh chan int
+}
+
+func currentCalendarWeekIterator() CalendarWeekIterator {
 	const duration = 10 * time.Minute;
 	
 	ch := make(chan int)
@@ -20,5 +24,5 @@ func nextCalendarWeek() chan int{
 		}
 	}()
 
-	return ch;
+	return CalendarWeekIterator{ch};
 }
