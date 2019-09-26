@@ -6,7 +6,9 @@ import (
 )
 
 func main() {
-	systray.Run(onReady, func(){})
+	EnableDpiAwareness()
+
+	systray.Run(onReady, func() {})
 }
 
 func onReady() {
@@ -16,14 +18,14 @@ func onReady() {
 	go quitOnMenu()
 }
 
-func keepWeekNumberIconUpToDate(){
+func keepWeekNumberIconUpToDate() {
 	calendarWeek := currentCalendarWeekIterator()
 	for {
 		updateIconAndTooltip(<-calendarWeek.ChangedCh)
 	}
 }
 
-func quitOnMenu(){
+func quitOnMenu() {
 	quitMenuItem := systray.AddMenuItem("Beenden", "Beendet die Applikation")
 	<-quitMenuItem.ClickedCh
 	systray.Quit()
