@@ -21,3 +21,6 @@ jobs:
 
     - name: Build
       run: build.cmd
+
+    - name: Run tests
+      run: test.cmd
