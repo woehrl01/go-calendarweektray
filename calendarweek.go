@@ -9,10 +9,12 @@ type CalendarWeekIterator struct {
 }
 
 func currentCalendarWeekIterator() CalendarWeekIterator {
-	return calendarWeekIteratorWithCustomProvider(10*time.Minute, func() int {
-		_, currentWeekNumber := time.Now().UTC().ISOWeek()
-		return currentWeekNumber
-	})
+	return calendarWeekIteratorWithCustomProvider(10*time.Minute, currentIsoWeek)
+}
+
+func currentIsoWeek() int {
+	_, currentWeekNumber := time.Now().UTC().ISOWeek()
+	return currentWeekNumber
 }
 
 func calendarWeekIteratorWithCustomProvider(duration time.Duration, currentWeekProvider func() int) CalendarWeekIterator {
