@@ -13,7 +13,7 @@ func currentCalendarWeekIterator() CalendarWeekIterator {
 }
 
 func currentIsoWeek() int {
-	_, currentWeekNumber := time.Now().UTC().ISOWeek()
+	_, currentWeekNumber := time.Now().ISOWeek()
 	return currentWeekNumber
 }
 
