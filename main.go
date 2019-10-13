@@ -6,7 +6,6 @@ import (
 
 	"github.com/getlantern/systray"
 	"github.com/goodsign/monday"
-	"github.com/snabb/isoweek"
 
 	ole "github.com/go-ole/go-ole"
 	"github.com/go-ole/go-ole/oleutil"
@@ -29,7 +28,8 @@ func onReady() {
 	go quitOnMenu()
 }
 
-func GoToDate(date string) {
+func GoToDate(dateToGo time.Time) {
+	date := dateToGo.Format("02/01/2006")
 	ole.CoInitialize(0)
 	defer ole.CoUninitialize()
 	unknown, _ := oleutil.CreateObject("Outlook.Application")
@@ -58,7 +58,7 @@ func addMenuItemsForUpcomingCalendarWeekDates() {
 		go func() {
 			for {
 				<-menus[index].ClickedCh
-				dateToGo := indexToDate(index).Format("02/01/2006")
+				_, dateToGo := offsetCalendarWeekToDate(index)
 				GoToDate(dateToGo)
 			}
 		}()
@@ -88,36 +88,10 @@ func updateIconAndTooltip(weekNumber int) {
 }
 
 func refreshUpcomingCalendarWeekItems() {
-	year, week := time.Now().ISOWeek()
-
 	for index, _ := range menus {
-		week++
-		startDate := isoweek.StartTime(year, week, time.Local)
-
-		if !isoweek.Validate(year, week) {
-			week = 1
-			year++
-		}
+		week, startDate := offsetCalendarWeekToDate(index)
 
 		text := fmt.Sprintf("KW %d: %s", week, monday.Format(startDate, "02. January 2006", monday.LocaleDeDE))
 		menus[index].SetTitle(text)
 	}
-}
-
-func indexToDate(ix int) time.Time {
-	year, week := time.Now().ISOWeek()
-	for index, _ := range menus {
-		week++
-		startDate := isoweek.StartTime(year, week, time.Local)
-
-		if !isoweek.Validate(year, week) {
-			week = 1
-			year++
-		}
-
-		if index == ix {
-			return startDate
-		}
-	}
-	return time.Now()
 }
