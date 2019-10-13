@@ -2,6 +2,8 @@ package main
 
 import (
 	"time"
+
+	"github.com/snabb/isoweek"
 )
 
 type CalendarWeekIterator struct {
@@ -32,4 +34,22 @@ func calendarWeekIteratorWithCustomProvider(duration time.Duration, currentWeekP
 	}()
 
 	return CalendarWeekIterator{ch}
+}
+
+func offsetCalendarWeekToDate(ix int) (int, time.Time) {
+	year, week := time.Now().ISOWeek()
+	for i := 0; i <= ix; i++ {
+		week++
+		startDate := isoweek.StartTime(year, week, time.Local)
+
+		if !isoweek.Validate(year, week) {
+			week = 1
+			year++
+		}
+
+		if i == ix {
+			return week, startDate
+		}
+	}
+	return week, time.Now()
 }
