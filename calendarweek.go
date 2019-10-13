@@ -36,20 +36,18 @@ func calendarWeekIteratorWithCustomProvider(duration time.Duration, currentWeekP
 	return CalendarWeekIterator{ch}
 }
 
-func offsetCalendarWeekToDate(ix int) (int, time.Time) {
-	year, week := time.Now().ISOWeek()
-	for i := 0; i <= ix; i++ {
-		week++
-		startDate := isoweek.StartTime(year, week, time.Local)
+func offsetCalendarWeekToDate(idx int) (int, time.Time) {
+	return offsetCalendarWeekToDateFromDate(idx, time.Now())
+}
 
+func offsetCalendarWeekToDateFromDate(idx int, offset time.Time) (int, time.Time) {
+	year, week := offset.ISOWeek()
+	for i := 0; i < idx; i++ {
+		week++
 		if !isoweek.Validate(year, week) {
 			week = 1
 			year++
 		}
-
-		if i == ix {
-			return week, startDate
-		}
 	}
-	return week, time.Now()
+	return week, isoweek.StartTime(year, week, time.Local)
 }
