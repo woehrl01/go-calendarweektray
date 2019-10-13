@@ -22,7 +22,7 @@ func goToDate(dateToGo time.Time) {
 	calendar := oleutil.MustCallMethod(ns, "GetDefaultFolder", 9).ToIDispatch()
 	explorer := oleutil.MustCallMethod(outlook, "ActiveExplorer").ToIDispatch()
 	if explorer == nil {
-		/*Start outllok if not started*/
+		// Start outlook if not started
 		oleutil.MustCallMethod(calendar, "Display")
 		explorer = oleutil.MustCallMethod(outlook, "ActiveExplorer").ToIDispatch()
 	}

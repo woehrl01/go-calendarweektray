@@ -43,7 +43,7 @@ func TestOffsetCalendarWeekToDate_WithNoOffset(t *testing.T) {
 	expectedStartDate := time.Date(2019, time.October, 7, 0, 0, 0, 0, time.Local)
 
 	if week != expectedWeek {
-		t.Errorf("The startdate was incorrect, got: %d, want: %d.", week, expectedWeek)
+		t.Errorf("The week was incorrect, got: %d, want: %d.", week, expectedWeek)
 	}
 
 	if startDate != expectedStartDate {
@@ -58,7 +58,7 @@ func TestOffsetCalendarWeekToDate_WithOneOffset(t *testing.T) {
 	expectedStartDate := time.Date(2019, time.October, 14, 0, 0, 0, 0, time.Local)
 
 	if week != expectedWeek {
-		t.Errorf("The startdate was incorrect, got: %d, want: %d.", week, expectedWeek)
+		t.Errorf("The week was incorrect, got: %d, want: %d.", week, expectedWeek)
 	}
 
 	if startDate != expectedStartDate {

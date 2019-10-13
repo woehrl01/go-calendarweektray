@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	EnableDpiAwareness()
+	enableDpiAwareness()
 
 	systray.Run(onReady, func() {})
 }
@@ -18,15 +18,16 @@ var menus []*systray.MenuItem
 func onReady() {
 	systray.SetTitle("Kalenderwoche")
 
-	addMenuItemsForUpcomingCalendarWeekDates()
+	const numberOfEntries = 15
+	addMenuItemsForUpcomingCalendarWeekDates(numberOfEntries)
 
 	go keepWeekNumberIconUpToDate()
 	go quitOnMenu()
 }
 
-func addMenuItemsForUpcomingCalendarWeekDates() {
-	for i := 0; i < 15; i++ {
-		var index = i
+func addMenuItemsForUpcomingCalendarWeekDates(numberOfEntries int) {
+	for i := 0; i < numberOfEntries; i++ {
+		index := i
 		menus = append(menus, systray.AddMenuItem("refresh", ""))
 		go func() {
 			for {

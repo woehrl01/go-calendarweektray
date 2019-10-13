@@ -11,6 +11,6 @@ var (
 	pSetProcessDPIAware = u32.NewProc("SetProcessDPIAware")
 )
 
-func EnableDpiAwareness() {
+func enableDpiAwareness() {
 	pSetProcessDPIAware.Call()
 }
