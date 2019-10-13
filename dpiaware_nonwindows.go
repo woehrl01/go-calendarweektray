@@ -2,6 +2,6 @@
 
 package main
 
-func EnableDpiAwareness() {
+func enableDpiAwareness() {
 	//NoOp
 }
