@@ -7,6 +7,12 @@ import (
 	"github.com/goodsign/monday"
 )
 
+var (
+	sha1ver   string // sha1 revision used to build the program
+	buildTime string // when the executable was built
+	semVer    string // the version of the build
+)
+
 func main() {
 	enableDpiAwareness()
 
@@ -49,7 +55,7 @@ func keepWeekNumberIconUpToDate() {
 }
 
 func quitOnMenu() {
-	quitMenuItem := systray.AddMenuItem("Beenden", "Beendet die Applikation")
+	quitMenuItem := systray.AddMenuItem(fmt.Sprintf("Beenden (%s - %s)", semVer, sha1ver), "Beendet die Applikation")
 	<-quitMenuItem.ClickedCh
 	systray.Quit()
 }
