@@ -20,7 +20,7 @@ jobs:
       run: getdeps.cmd
 
     - name: Build
-      run: build.ps1
+      run: build.cmd
 
     - name: Run tests
       run: test.cmd
